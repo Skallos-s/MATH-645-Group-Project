@@ -1,9 +1,6 @@
 % Author Joshua Calzadillas
 % Example Animation 2
 function result = exampleAnimation2()
-    % This is used to make axis invisible
-    %set(ha,'handlevisibility','off', 'visible','off')
-
     % Add animation Library
     addpath("./2DAML")
 
