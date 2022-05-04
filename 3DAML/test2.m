@@ -1,5 +1,5 @@
 [data1,leng1] = SnubDisphenoid(1);
-[data2,leng2] = Dodecahedron(1);
+[data2,leng2] = Icosahedron(1);
 
 col = hsv(256);
 axes = [-3,3,-3,3];
