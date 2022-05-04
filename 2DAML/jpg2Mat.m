@@ -17,5 +17,5 @@ function res = jpg2Mat(filename, threshold)
         disp("File " + fnameout + ".mat exists")
     end
     fnameout = fnameout + ".mat";
-    res = load(fnameout);
+    res = load(fnameout).Pout;
 end
