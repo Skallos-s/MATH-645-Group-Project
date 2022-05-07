@@ -1,16 +1,6 @@
-function m = moveToOrigin(m)
-    % Get center points
-    centerX = getCenterX(m);
-    centerY = getCenterY(m);
-
-    % Iterative move to the origin
-    for i = 1:1:size(m, 1)
-        for j = 1:1:size(m, 2)
-            if (i == 1)
-                m(i,j) = m(i, j) - centerX;
-            else
-                m(i,j) = m(i, j) - centerY;
-            end
-        end
-    end
+% Move matrix of a single set of vector points
+% to the origin
+% i.e. MAT = someOBJ(1:2,:);
+function result = moveToOrigin(MAT)
+    result = MAT - [getCenterX(MAT); getCenterY(MAT)];
 end
