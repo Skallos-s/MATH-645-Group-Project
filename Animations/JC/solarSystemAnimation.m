@@ -4,6 +4,8 @@ function result = solarSystemAnimation()
     addpath("../../2DAML")
     
     % Planets
+    % Planet Fact Sheet
+    % https://nssdc.gsfc.nasa.gov/planetary/factsheet/index.html
     mercury = makeCircle(0.5 * 4.879, pi/64);   % Mercury
     venus = makeCircle(0.5 * 12.104, pi/64);    % Venus
     earth = makeCircle(0.5 * 12.756, pi/64);    % Earth
@@ -16,6 +18,103 @@ function result = solarSystemAnimation()
     planets = [mercury; venus; earth; mars];   % Object list of planets
     planetColors = ['r' 'c' 'g' 'm'];
     PCSize = size(planetColors, 2);
+
+    % Showcase the planets
+    pause(0.5)
+    bigMercury = mercury * 10^3; % in terms of Km
+    space = centerObject(makeSquare(140000));
+    
+    % Plot Space with mercury
+    fill(space(1,:), space(2,:), 'k')
+    hold on
+    fill(bigMercury(1,:), bigMercury(2,:), 'm')
+    title("Mercury Planet Scale")
+    xlabel("Km")
+    ylabel("Km")
+    axis([-12000 12000 -12000 12000])
+    hold off
+    disp("Please Wait 2 Seconds")
+    pause(2)
+    
+    % Scale down animation
+    ScaleDownFactor = 0.1;
+    axisSize = 12000;
+    for k = 1:1:3
+        bigMercury = [ScaleDownFactor 0; 0 ScaleDownFactor] * bigMercury;
+        fill(space(1,:), space(2,:), 'k')
+        hold on
+        fill(bigMercury(1,:), bigMercury(2,:), 'm')
+        title("Mercury Planet Scale")
+        xlabel("Km")
+        ylabel("Km")
+        axis([-axisSize axisSize -axisSize axisSize])
+        hold off
+        pause(1)
+    end
+
+    % Zoom In Effect to 1000
+    for k = 1:1:11
+        axisSize = 12000 - (1000 * k);
+        hold on
+        axis([-axisSize axisSize -axisSize axisSize])
+        hold off
+        pause(0.1)
+    end
+    clear bigMercury
+    axisSize = 12;
+    fill(space(1,:), space(2,:), 'k')
+    hold on
+    fill(mercury(1,:), mercury(2,:), 'm')
+    title("Mercury Planet Scale")
+    xlabel("Km^-3")
+    ylabel("Km^-3")
+    axis([-axisSize axisSize -axisSize axisSize])
+    hold off
+    pause(3)
+
+    % Rotation Transformation
+
+    % Plot initial state 
+    clear space
+    MercOrbPos = centerObject(makeRectangle(8,0.5 * 4.879));
+    space = centerObject(makeSquare(25));
+    fill(space(1,:), space(2,:), 'k')
+    hold on
+    fill(mercury(1,:), mercury(2,:), 'm')
+    fill(MercOrbPos(1,:), MercOrbPos(2,:), 'g')
+    title("Mercury Planet Rotate")
+    xlabel("Km^-3")
+    ylabel("Km^-3")
+    axis([-axisSize axisSize -axisSize axisSize])
+    hold off
+    pause(2)
+    
+    % Rotation Transformation Sequence
+    mercOrbPos = MercOrbPos;
+    disp("Mercury Rotates around itself once every 4222.6 hours or once every " + (4222.6/24) + " days")
+    for k = 1:pi/64:(2 * pi + pi/64)
+        % Transform
+        mercOrbPos = rotateObject(MercOrbPos, k);
+
+        % Plot
+        fill(space(1,:), space(2,:), 'k')
+        hold on
+        fill(mercury(1,:), mercury(2,:), 'm')
+        fill(mercOrbPos(1,:), mercOrbPos(2,:), 'g')
+        title("Mercury Planet Rotate")
+        xlabel("Km^-3")
+        ylabel("Km^-3")
+        axis([-axisSize axisSize -axisSize axisSize])
+        hold off
+        pause(0.05)
+    end
+    pause(2)
+    % Cleanup
+    clear mercOrbPos
+    clear MercOrbPos
+    clear axisSize
+    clear space
+    disp("Now Doing Orbital Mechanics Animation")
 
 
     % Orbital Paths
@@ -84,6 +183,33 @@ function result = solarSystemAnimation()
     pXSize = size(planetXCords, 2);
     orbitXCords = objectXCords(orbitalPaths);
     oXSize = size(orbitXCords, 2);
+
+    % Initial Plot
+    % Plot Space
+    fill(4 * space(1,:), 4 * space(2,:), 'k');
+    
+    
+    % Orbital Path Mapping
+    hold on
+    % Plot Orbital Paths
+    plot(orbitalPaths(1,:), orbitalPaths(2,:), "Color",  orbitalColors(1, 4));
+    plot(orbitalPaths(3,:), orbitalPaths(4,:), "Color",  orbitalColors(1, 3));
+    plot(orbitalPaths(5,:), orbitalPaths(6,:), "Color",  orbitalColors(1, 2));
+    plot(orbitalPaths(7,:), orbitalPaths(8,:), "Color",  orbitalColors(1, 1));
+
+    % Plot Planets
+    fill(planets(1,:), planets(2,:), planetColors(1, 4));
+    fill(planets(3,:), planets(4,:), planetColors(1, 3));
+    fill(planets(5,:), planets(6,:), planetColors(1, 2));
+    fill(planets(7,:), planets(8,:), planetColors(1, 1));
+    fill(sun(1,:), sun(2,:), 'y');
+    legend(["Space", "Mercury Orbit", "Venus Orbit", "Earth Orbit", "Mars Orbit", "Mercury", "Venus", "Earth", "Mars", "Sun"])
+    title("Orbital Mechanics of Planets Animation")
+    hold off
+    pause(5)
+    
+
+    % Animation Plot
     for rt = 1:1:runTimes
         for k = 1:1:orbitalPathSize
             % Transformations on planets
@@ -116,12 +242,14 @@ function result = solarSystemAnimation()
 
             % Plot Objects
             axis([-axisSize axisSize -axisSize axisSize]);
+            title("Orbital Animation")
+            xlabel("Km^-3")
+            ylabel("Km^-3")
             pause(0.03)
         end
         pause(0.01)
     end
 
     % This is a requirement for the project
-%     result = rescaleTo3DAnimationAxis(eli2); % This must be included at the end of the animation
     result = 0;
 end

@@ -1,5 +1,5 @@
 % Flip Points along the X Axis (based on the centroid of the image matrix)
-function result = shearRight(m, value)
+function result = shearRight(M, value)
 % Getting Center Points
     centerX = getCenterX(M);
     centerY = getCenterY(M);
